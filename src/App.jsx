@@ -11,6 +11,10 @@ import EpisodesPage        from './pages/EpisodesPage'
 import EpisodeDetailPage   from './pages/EpisodeDetailPage'
 import LocationsPage       from './pages/LocationsPage'
 import LocationDetailPage  from './pages/LocationDetailPage'
+import EpisodeSlotMachinePage from './pages/EpisodeSlotMachinePage'
+import GuessCharacterPage  from './pages/GuessCharacterPage'
+import MemoryGamePage      from './pages/MemoryGamePage'
+import QuoteGamePage       from './pages/QuoteGamePage'
 import NotFoundPage        from './pages/NotFoundPage'
 
 export default function App() {
@@ -27,8 +31,12 @@ export default function App() {
           <Route path="/characters/:id"     element={<CharacterDetailPage />} />
           <Route path="/episodes"           element={<EpisodesPage />} />
           <Route path="/episodes/:id"       element={<EpisodeDetailPage />} />
+          <Route path="/episode-machine"    element={<EpisodeSlotMachinePage />} />
           <Route path="/locations"          element={<LocationsPage />} />
           <Route path="/locations/:id"      element={<LocationDetailPage />} />
+          <Route path="/guess-character"    element={<GuessCharacterPage />} />
+          <Route path="/memory-game"        element={<MemoryGamePage />} />
+          <Route path="/quote-game"         element={<QuoteGamePage />} />
           <Route path="*"                   element={<NotFoundPage />} />
         </Routes>
       </main>

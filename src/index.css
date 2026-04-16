@@ -471,6 +471,1655 @@
     background: linear-gradient(180deg, rgba(10, 10, 15, 0.28), rgba(10, 10, 15, 0.72));
   }
 
+  .memory-orb {
+    position: absolute;
+    width: 26rem;
+    height: 26rem;
+    border-radius: 9999px;
+    filter: blur(60px);
+    opacity: 0.22;
+  }
+
+  .memory-orb-lime {
+    top: -8rem;
+    left: -5rem;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.9) 0%, rgba(151, 206, 76, 0) 70%);
+  }
+
+  .memory-orb-cyan {
+    top: -5rem;
+    right: -4rem;
+    background: radial-gradient(circle, rgba(0, 181, 204, 0.75) 0%, rgba(0, 181, 204, 0) 70%);
+  }
+
+  .memory-stats-panel {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .memory-stat-tile {
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(10, 10, 15, 0.92));
+    padding: 0.9rem 0.8rem;
+  }
+
+  .memory-stat-tile-pulse {
+    animation: memoryStatPulse 420ms ease;
+  }
+
+  .memory-stat-label {
+    display: block;
+    font-size: 0.68rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .memory-stat-value {
+    display: block;
+    margin-top: 0.55rem;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #f9fafb;
+    text-shadow: 0 0 16px rgba(151, 206, 76, 0.14);
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .memory-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 0.78;
+    perspective: 1400px;
+    border-radius: 1.5rem;
+    outline: none;
+  }
+
+  .memory-card:focus-visible {
+    box-shadow: 0 0 0 1px rgba(151, 206, 76, 0.46), 0 0 0 4px rgba(151, 206, 76, 0.14);
+  }
+
+  .memory-card-inner {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.28s ease;
+  }
+
+  .memory-card:hover .memory-card-inner {
+    filter: drop-shadow(0 20px 34px rgba(0, 0, 0, 0.36));
+  }
+
+  .memory-card.is-flipped .memory-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .memory-card-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    overflow: hidden;
+    border-radius: inherit;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .memory-card-back,
+  .memory-card-front {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 18px 42px rgba(0, 0, 0, 0.28);
+  }
+
+  .memory-card-back {
+    align-items: center;
+    justify-content: center;
+    background:
+      linear-gradient(145deg, rgba(17, 24, 39, 0.98), rgba(10, 10, 15, 0.98)),
+      linear-gradient(145deg, rgba(151, 206, 76, 0.12), rgba(0, 181, 204, 0.1));
+  }
+
+  .memory-card-back::before {
+    content: '';
+    position: absolute;
+    inset: 1rem;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(151, 206, 76, 0.08);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%),
+      radial-gradient(circle at 50% 40%, rgba(151, 206, 76, 0.16), transparent 55%);
+  }
+
+  .memory-card-back-core,
+  .memory-card-back-ring,
+  .memory-card-back-copy {
+    position: absolute;
+  }
+
+  .memory-card-back-core {
+    width: 5.7rem;
+    height: 5.7rem;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.45) 0%, rgba(0, 181, 204, 0.2) 40%, rgba(10, 10, 15, 0) 74%);
+    filter: blur(8px);
+  }
+
+  .memory-card-back-ring {
+    inset: 50%;
+    width: 6rem;
+    height: 6rem;
+    margin-left: -3rem;
+    margin-top: -3rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(151, 206, 76, 0.3);
+    box-shadow: 0 0 20px rgba(151, 206, 76, 0.12);
+  }
+
+  .memory-card-back-ring-a {
+    animation: memoryPulse 4.2s ease-in-out infinite;
+  }
+
+  .memory-card-back-ring-b {
+    width: 8.5rem;
+    height: 8.5rem;
+    margin-left: -4.25rem;
+    margin-top: -4.25rem;
+    border-color: rgba(0, 181, 204, 0.22);
+    animation: memoryPulse 4.2s ease-in-out infinite 0.45s;
+  }
+
+  .memory-card-back-copy {
+    inset: auto 1.4rem 1.35rem;
+    text-align: left;
+  }
+
+  .memory-card-back-label,
+  .memory-card-back-code {
+    display: block;
+  }
+
+  .memory-card-back-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(151, 206, 76, 0.76);
+  }
+
+  .memory-card-back-code {
+    margin-top: 0.35rem;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(249, 250, 251, 0.92);
+  }
+
+  .memory-card-front {
+    transform: rotateY(180deg);
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.45), rgba(10, 10, 15, 0.82));
+  }
+
+  .memory-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.45s ease, filter 0.45s ease;
+  }
+
+  .memory-card:hover .memory-card-image {
+    transform: scale(1.04);
+    filter: saturate(1.06);
+  }
+
+  .memory-card-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(10, 10, 15, 0.04) 0%, rgba(10, 10, 15, 0.12) 38%, rgba(10, 10, 15, 0.88) 100%),
+      linear-gradient(135deg, rgba(151, 206, 76, 0.16), transparent 36%, rgba(0, 181, 204, 0.12));
+  }
+
+  .memory-card-meta {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    padding: 1rem;
+    text-align: left;
+  }
+
+  .memory-card-name,
+  .memory-card-detail {
+    display: block;
+  }
+
+  .memory-card-name {
+    font-size: 1rem;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #f9fafb;
+  }
+
+  .memory-card-detail {
+    margin-top: 0.3rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(209, 213, 219, 0.8);
+  }
+
+  .memory-card.is-matched .memory-card-front,
+  .memory-card.is-matched .memory-card-back {
+    border-color: rgba(151, 206, 76, 0.36);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 18px 42px rgba(0, 0, 0, 0.28),
+      0 0 24px rgba(151, 206, 76, 0.16);
+  }
+
+  .memory-card.is-matched .memory-card-inner {
+    animation: memoryMatchedPulse 0.72s ease;
+  }
+
+  .memory-card.is-matched .memory-card-front::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(151, 206, 76, 0.4);
+    box-shadow:
+      inset 0 0 24px rgba(151, 206, 76, 0.08),
+      0 0 20px rgba(151, 206, 76, 0.18);
+    pointer-events: none;
+  }
+
+  .memory-card.is-mismatched .memory-card-front,
+  .memory-card.is-mismatched .memory-card-back {
+    border-color: rgba(251, 113, 133, 0.32);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 18px 42px rgba(0, 0, 0, 0.28),
+      0 0 18px rgba(251, 113, 133, 0.12);
+  }
+
+  .memory-card.is-mismatched .memory-card-inner {
+    animation: memoryMismatchPulse 0.45s ease;
+  }
+
+  .memory-card.is-mismatched .memory-card-front::before,
+  .memory-card.is-mismatched .memory-card-back::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(251, 113, 133, 0.08), rgba(244, 114, 182, 0.04));
+    pointer-events: none;
+  }
+
+  .memory-success-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(151, 206, 76, 0.26);
+    background:
+      linear-gradient(135deg, rgba(151, 206, 76, 0.14), rgba(0, 181, 204, 0.08) 55%, rgba(10, 10, 15, 0.72)),
+      linear-gradient(180deg, rgba(10, 10, 15, 0.82), rgba(15, 23, 42, 0.92));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 28px rgba(151, 206, 76, 0.12);
+  }
+
+  .memory-success-panel::before {
+    content: '';
+    position: absolute;
+    inset: -35% auto auto -15%;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.18), transparent 70%);
+    filter: blur(12px);
+    animation: memorySuccessDrift 5.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .memory-success-copy {
+    position: relative;
+    z-index: 1;
+  }
+
+  .memory-success-kicker {
+    margin-bottom: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(151, 206, 76, 0.82);
+  }
+
+  .memory-success-title {
+    margin-bottom: 0.45rem;
+    font-size: 1.15rem;
+    line-height: 1.15;
+    font-weight: 800;
+    color: #f9fafb;
+    text-shadow: 0 0 16px rgba(151, 206, 76, 0.16);
+  }
+
+  .guess-orb {
+    position: absolute;
+    width: 24rem;
+    height: 24rem;
+    border-radius: 9999px;
+    filter: blur(58px);
+    opacity: 0.2;
+  }
+
+  .guess-orb-lime {
+    top: -9rem;
+    left: -4rem;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.9), rgba(151, 206, 76, 0) 72%);
+  }
+
+  .guess-orb-cyan {
+    top: -6rem;
+    right: -5rem;
+    background: radial-gradient(circle, rgba(0, 181, 204, 0.75), rgba(0, 181, 204, 0) 72%);
+  }
+
+  .guess-score-panel {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .guess-mode-switch {
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+  .guess-mode-button {
+    min-width: 8.5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.86), rgba(10, 10, 15, 0.92));
+    padding: 0.85rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    transition: all 0.22s ease;
+  }
+
+  .guess-mode-button:hover:not(.is-active) {
+    color: #f3f4f6;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .guess-mode-button.is-active {
+    border-color: rgba(151, 206, 76, 0.3);
+    background:
+      linear-gradient(135deg, rgba(151, 206, 76, 0.14), rgba(0, 181, 204, 0.08) 55%, rgba(10, 10, 15, 0.88)),
+      linear-gradient(180deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.94));
+    color: #d9f7ae;
+    box-shadow: 0 0 18px rgba(151, 206, 76, 0.1);
+  }
+
+  .guess-score-tile {
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(10, 10, 15, 0.92));
+    padding: 0.9rem 0.8rem;
+  }
+
+  .guess-score-label {
+    display: block;
+    font-size: 0.68rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .guess-score-value {
+    display: block;
+    margin-top: 0.55rem;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #f9fafb;
+  }
+
+  .guess-stage,
+  .guess-panel {
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.3);
+  }
+
+  .guess-stage-shell {
+    position: relative;
+  }
+
+  .guess-character-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 0.92;
+    border-radius: 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.03),
+      0 20px 46px rgba(0, 0, 0, 0.28);
+  }
+
+  .guess-character-grid,
+  .guess-character-shade,
+  .guess-character-glow,
+  .guess-character-scanline,
+  .guess-character-meta {
+    position: absolute;
+  }
+
+  .guess-character-grid {
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 36px 36px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .guess-character-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      filter 0.55s ease,
+      transform 0.55s ease,
+      opacity 0.55s ease;
+  }
+
+  .guess-character-frame.is-concealed .guess-character-image {
+    filter: grayscale(0.97) brightness(0.24) contrast(1.32) saturate(0.3) blur(1.55px);
+    transform: scale(1.03);
+  }
+
+  .guess-character-frame.is-revealed .guess-character-image {
+    filter: grayscale(0) brightness(1) contrast(1.02) saturate(1.02) blur(0);
+    transform: scale(1);
+  }
+
+  .guess-character-shade {
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(42, 54, 68, 0.03), rgba(10, 10, 15, 0.24) 34%, rgba(10, 10, 15, 0.64) 82%),
+      linear-gradient(180deg, rgba(10, 10, 15, 0.14), rgba(10, 10, 15, 0.56));
+    transition: opacity 0.45s ease;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .guess-character-frame.is-revealed .guess-character-shade {
+    opacity: 0.18;
+  }
+
+  .guess-character-glow {
+    inset: auto 12% -18% 12%;
+    height: 42%;
+    background: radial-gradient(circle at center, rgba(151, 206, 76, 0.16), rgba(0, 181, 204, 0.06) 42%, transparent 76%);
+    filter: blur(28px);
+    transition: opacity 0.45s ease;
+    opacity: 0.4;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .guess-character-frame.is-success .guess-character-glow {
+    opacity: 0.92;
+  }
+
+  .guess-character-frame.is-failed .guess-character-glow {
+    background: radial-gradient(circle at center, rgba(251, 113, 133, 0.14), rgba(244, 114, 182, 0.06) 40%, transparent 78%);
+    opacity: 0.7;
+  }
+
+  .guess-character-scanline {
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 22%;
+    background: linear-gradient(180deg, rgba(151, 206, 76, 0.12), rgba(151, 206, 76, 0));
+    mix-blend-mode: screen;
+    filter: blur(10px);
+    animation: guessScanSweep 4.5s ease-in-out infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .guess-character-meta {
+    inset: auto 0 0;
+    z-index: 3;
+    padding: 1.2rem;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.04), rgba(10, 10, 15, 0.86) 78%);
+  }
+
+  .guess-location-frame .guess-character-grid {
+    z-index: 0;
+  }
+
+  .guess-location-clueboard {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .guess-location-header,
+  .guess-location-clues {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .guess-location-header {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guess-location-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(151, 206, 76, 0.18);
+    background: rgba(151, 206, 76, 0.08);
+    padding: 0.55rem 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(151, 206, 76, 0.84);
+  }
+
+  .guess-location-chip.is-secondary {
+    justify-content: flex-end;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.62);
+    color: #d1d5db;
+  }
+
+  .guess-location-clues {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .guess-location-clue-card,
+  .guess-location-atmosphere {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 50%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.88), rgba(10, 10, 15, 0.92));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .guess-location-clue-card {
+    min-height: 7rem;
+    padding: 0.95rem 0.9rem;
+  }
+
+  .guess-location-clue-label,
+  .guess-location-clue-value {
+    display: block;
+  }
+
+  .guess-location-clue-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .guess-location-clue-value {
+    margin-top: 0.7rem;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #f9fafb;
+  }
+
+  .guess-location-atmosphere {
+    padding: 1rem;
+    min-height: 7.5rem;
+  }
+
+  .guess-location-atmosphere-copy {
+    margin-top: 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #d1d5db;
+  }
+
+  .guess-location-visual {
+    position: relative;
+    overflow: hidden;
+    min-height: 11rem;
+    border-radius: 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 25%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.84), rgba(10, 10, 15, 0.92));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .guess-location-visual-glow {
+    position: absolute;
+    inset: auto 14% -18% 14%;
+    height: 70%;
+    border-radius: 9999px;
+    background: radial-gradient(circle at center, rgba(151, 206, 76, 0.22), rgba(0, 181, 204, 0.1) 42%, transparent 76%);
+    filter: blur(24px);
+    opacity: 0.52;
+    animation: guessLocationGlowPulse 4.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .guess-location-visual-image {
+    position: absolute;
+    inset: auto 0 0;
+    height: 100%;
+    opacity: 0.28;
+    filter: blur(8px);
+    pointer-events: none;
+  }
+
+  .guess-location-visual-image span {
+    position: absolute;
+    display: block;
+  }
+
+  .guess-location-visual-planet {
+    top: 8%;
+    right: 10%;
+    width: 8.5rem;
+    height: 8.5rem;
+    border-radius: 9999px;
+  }
+
+  .guess-location-visual-ring {
+    top: 22%;
+    right: 4%;
+    width: 12rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    transform: rotate(-14deg);
+  }
+
+  .guess-location-visual-horizon {
+    left: -8%;
+    right: -8%;
+    bottom: -6%;
+    height: 44%;
+    border-radius: 48% 52% 0 0;
+  }
+
+  .guess-location-visual-structure {
+    bottom: 0;
+    width: 3rem;
+    border-radius: 9999px 9999px 0 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
+  }
+
+  .guess-location-visual-structure-a {
+    left: 12%;
+    height: 34%;
+  }
+
+  .guess-location-visual-structure-b {
+    left: 30%;
+    height: 24%;
+  }
+
+  .guess-location-visual-structure-c {
+    right: 18%;
+    width: 4rem;
+    height: 42%;
+  }
+
+  .guess-location-sigil {
+    position: absolute;
+    right: 1rem;
+    bottom: 6.7rem;
+    width: 8rem;
+    height: 8rem;
+    pointer-events: none;
+    opacity: 0.88;
+  }
+
+  .guess-location-sigil span {
+    position: absolute;
+    display: block;
+  }
+
+  .guess-location-sigil-core {
+    inset: 26%;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.26), rgba(0, 181, 204, 0.14) 46%, transparent 76%);
+    filter: blur(8px);
+  }
+
+  .guess-location-sigil-ring {
+    inset: 50%;
+    border-radius: 9999px;
+    border: 1px solid rgba(151, 206, 76, 0.24);
+    box-shadow: 0 0 18px rgba(151, 206, 76, 0.08);
+  }
+
+  .guess-location-sigil-ring-a {
+    width: 4rem;
+    height: 4rem;
+    margin-left: -2rem;
+    margin-top: -2rem;
+  }
+
+  .guess-location-sigil-ring-b {
+    width: 6rem;
+    height: 6rem;
+    margin-left: -3rem;
+    margin-top: -3rem;
+    border-color: rgba(0, 181, 204, 0.2);
+  }
+
+  .guess-location-frame.is-default .guess-location-clue-card,
+  .guess-location-frame.is-default .guess-location-atmosphere,
+  .guess-location-frame.is-default .guess-location-visual {
+    border-color: rgba(151, 206, 76, 0.08);
+  }
+
+  .guess-location-frame.is-default .guess-location-visual-planet {
+    background: radial-gradient(circle at 30% 30%, #d8ffe1, #97ce4c 42%, #264d3a 74%);
+  }
+
+  .guess-location-frame.is-default .guess-location-visual-horizon {
+    background: linear-gradient(180deg, rgba(22, 36, 48, 0.18), rgba(15, 23, 42, 0.82));
+  }
+
+  .guess-location-frame.is-planet .guess-location-clue-card,
+  .guess-location-frame.is-planet .guess-location-atmosphere,
+  .guess-location-frame.is-planet .guess-location-visual {
+    border-color: rgba(251, 191, 36, 0.1);
+  }
+
+  .guess-location-frame.is-planet .guess-location-visual-planet {
+    background: radial-gradient(circle at 30% 30%, #fff6cf, #fbbf24 40%, #834f11 76%);
+  }
+
+  .guess-location-frame.is-planet .guess-location-visual-horizon {
+    background: linear-gradient(180deg, rgba(66, 42, 15, 0.2), rgba(38, 22, 13, 0.86));
+  }
+
+  .guess-location-frame.is-station .guess-location-clue-card,
+  .guess-location-frame.is-station .guess-location-atmosphere,
+  .guess-location-frame.is-station .guess-location-visual {
+    border-color: rgba(0, 181, 204, 0.1);
+  }
+
+  .guess-location-frame.is-station .guess-location-visual-planet {
+    background: radial-gradient(circle at 30% 30%, #d6f1ff, #67e8f9 38%, #164e63 74%);
+  }
+
+  .guess-location-frame.is-station .guess-location-visual-horizon {
+    background: linear-gradient(180deg, rgba(15, 30, 52, 0.18), rgba(10, 16, 28, 0.88));
+  }
+
+  .guess-location-frame.is-dimension .guess-location-clue-card,
+  .guess-location-frame.is-dimension .guess-location-atmosphere,
+  .guess-location-frame.is-dimension .guess-location-visual {
+    border-color: rgba(167, 139, 250, 0.1);
+  }
+
+  .guess-location-frame.is-dimension .guess-location-visual-planet {
+    background: radial-gradient(circle at 30% 30%, #f5ecff, #a78bfa 42%, #4c1d95 76%);
+  }
+
+  .guess-location-frame.is-dimension .guess-location-visual-ring {
+    border-color: rgba(196, 181, 253, 0.22);
+  }
+
+  .guess-location-frame.is-dimension .guess-location-visual-horizon {
+    background: linear-gradient(180deg, rgba(52, 26, 86, 0.18), rgba(24, 10, 43, 0.88));
+  }
+
+  .guess-location-frame.is-dream .guess-location-clue-card,
+  .guess-location-frame.is-dream .guess-location-atmosphere,
+  .guess-location-frame.is-dream .guess-location-visual {
+    border-color: rgba(244, 114, 182, 0.1);
+  }
+
+  .guess-location-frame.is-dream .guess-location-visual-planet {
+    background: radial-gradient(circle at 30% 30%, #ffe1f3, #fb7185 42%, #7f1d1d 76%);
+  }
+
+  .guess-location-frame.is-dream .guess-location-visual-horizon {
+    background: linear-gradient(180deg, rgba(68, 20, 52, 0.2), rgba(31, 11, 33, 0.88));
+  }
+
+  .guess-location-frame.is-concealed .guess-location-clueboard {
+    filter: brightness(0.68) contrast(1.05);
+    transition: filter 0.45s ease, transform 0.45s ease;
+  }
+
+  .guess-location-frame.is-revealed .guess-location-clueboard {
+    filter: brightness(1) contrast(1);
+    transition: filter 0.45s ease, transform 0.45s ease;
+  }
+
+  .guess-character-kicker,
+  .guess-character-title,
+  .guess-character-detail {
+    display: block;
+  }
+
+  .guess-character-kicker {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(151, 206, 76, 0.82);
+  }
+
+  .guess-character-title {
+    margin-top: 0.45rem;
+    font-size: 1.3rem;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #f9fafb;
+  }
+
+  .guess-character-detail {
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(209, 213, 219, 0.8);
+  }
+
+  .guess-status-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.72);
+    color: #d1d5db;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: all 0.25s ease;
+  }
+
+  .guess-status-pill.is-success {
+    border-color: rgba(151, 206, 76, 0.28);
+    color: #d9f7ae;
+    box-shadow: 0 0 18px rgba(151, 206, 76, 0.12);
+  }
+
+  .guess-status-pill.is-failed {
+    border-color: rgba(251, 113, 133, 0.24);
+    color: #fecdd3;
+    box-shadow: 0 0 16px rgba(251, 113, 133, 0.08);
+  }
+
+  .guess-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    overflow: hidden;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 46%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    padding: 1rem 1.05rem;
+    text-align: left;
+    transition:
+      border-color 0.22s ease,
+      box-shadow 0.22s ease,
+      transform 0.22s ease,
+      opacity 0.22s ease;
+  }
+
+  .guess-option:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: rgba(151, 206, 76, 0.2);
+    box-shadow: 0 16px 26px rgba(0, 0, 0, 0.24), 0 0 18px rgba(151, 206, 76, 0.08);
+  }
+
+  .guess-option:disabled {
+    cursor: default;
+  }
+
+  .guess-option-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+  }
+
+  .guess-option-kicker {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .guess-option-name {
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #f9fafb;
+  }
+
+  .guess-option-indicator {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.03);
+    transition: all 0.22s ease;
+  }
+
+  .guess-option.is-correct {
+    border-color: rgba(151, 206, 76, 0.3);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26), 0 0 20px rgba(151, 206, 76, 0.12);
+  }
+
+  .guess-option.is-correct .guess-option-indicator {
+    background: rgba(151, 206, 76, 0.88);
+    box-shadow: 0 0 0 6px rgba(151, 206, 76, 0.1), 0 0 12px rgba(151, 206, 76, 0.24);
+  }
+
+  .guess-option.is-wrong {
+    border-color: rgba(251, 113, 133, 0.28);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.22), 0 0 18px rgba(251, 113, 133, 0.08);
+    animation: guessOptionShake 420ms ease;
+  }
+
+  .guess-option.is-wrong .guess-option-indicator {
+    background: rgba(251, 113, 133, 0.9);
+    box-shadow: 0 0 0 6px rgba(251, 113, 133, 0.08), 0 0 10px rgba(251, 113, 133, 0.18);
+  }
+
+  .guess-option.is-dimmed {
+    opacity: 0.58;
+  }
+
+  .quote-orb {
+    position: absolute;
+    width: 24rem;
+    height: 24rem;
+    border-radius: 9999px;
+    filter: blur(58px);
+    opacity: 0.18;
+  }
+
+  .quote-orb-lime {
+    top: -8rem;
+    left: -4rem;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.86), rgba(151, 206, 76, 0) 72%);
+  }
+
+  .quote-orb-cyan {
+    top: -5rem;
+    right: -5rem;
+    background: radial-gradient(circle, rgba(0, 181, 204, 0.72), rgba(0, 181, 204, 0) 72%);
+  }
+
+  .quote-score-panel {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .quote-score-tile {
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(10, 10, 15, 0.92));
+    padding: 0.9rem 0.8rem;
+  }
+
+  .quote-score-label {
+    display: block;
+    font-size: 0.68rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .quote-score-value {
+    display: block;
+    margin-top: 0.55rem;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #f9fafb;
+  }
+
+  .quote-stage,
+  .quote-panel {
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.3);
+  }
+
+  .quote-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 100%;
+    border-radius: 1.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 42%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.03),
+      0 22px 50px rgba(0, 0, 0, 0.28);
+    transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+  }
+
+  .quote-card.is-correct {
+    border-color: rgba(151, 206, 76, 0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.03),
+      0 22px 50px rgba(0, 0, 0, 0.28),
+      0 0 24px rgba(151, 206, 76, 0.12);
+  }
+
+  .quote-card.is-wrong {
+    border-color: rgba(251, 113, 133, 0.24);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.03),
+      0 22px 50px rgba(0, 0, 0, 0.28),
+      0 0 20px rgba(251, 113, 133, 0.08);
+  }
+
+  .quote-card.is-transitioning {
+    animation: quotePortalShift 260ms ease;
+  }
+
+  .quote-card-portal {
+    position: absolute;
+    inset: -18% auto auto -8%;
+    width: 18rem;
+    height: 18rem;
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at center, rgba(151, 206, 76, 0.18), rgba(0, 181, 204, 0.1) 34%, rgba(10, 10, 15, 0) 72%);
+    filter: blur(20px);
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  .quote-card-frame {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 1.6rem;
+    text-align: center;
+  }
+
+  .quote-card-kicker,
+  .quote-card-text,
+  .quote-card-hint {
+    display: block;
+  }
+
+  .quote-card-kicker {
+    margin-bottom: 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(151, 206, 76, 0.82);
+  }
+
+  .quote-card-text {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+    line-height: 1.28;
+    font-weight: 700;
+    color: #f9fafb;
+    text-wrap: balance;
+    text-shadow: 0 0 24px rgba(151, 206, 76, 0.08);
+  }
+
+  .quote-card-hint {
+    margin-top: 1.2rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #9ca3af;
+  }
+
+  .quote-status-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.72);
+    color: #d1d5db;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: all 0.25s ease;
+  }
+
+  .quote-status-pill.is-correct {
+    border-color: rgba(151, 206, 76, 0.28);
+    color: #d9f7ae;
+    box-shadow: 0 0 18px rgba(151, 206, 76, 0.12);
+  }
+
+  .quote-status-pill.is-wrong {
+    border-color: rgba(251, 113, 133, 0.24);
+    color: #fecdd3;
+    box-shadow: 0 0 16px rgba(251, 113, 133, 0.08);
+  }
+
+  .quote-answer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    overflow: hidden;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 46%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    padding: 1rem 1.05rem;
+    text-align: left;
+    transition:
+      border-color 0.22s ease,
+      box-shadow 0.22s ease,
+      transform 0.22s ease,
+      opacity 0.22s ease;
+  }
+
+  .quote-answer:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: rgba(151, 206, 76, 0.2);
+    box-shadow: 0 16px 26px rgba(0, 0, 0, 0.24), 0 0 18px rgba(151, 206, 76, 0.08);
+  }
+
+  .quote-answer:disabled {
+    cursor: default;
+  }
+
+  .quote-answer-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+  }
+
+  .quote-answer-kicker {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .quote-answer-name {
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #f9fafb;
+  }
+
+  .quote-answer-indicator {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.03);
+    transition: all 0.22s ease;
+  }
+
+  .quote-answer.is-correct {
+    border-color: rgba(151, 206, 76, 0.3);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26), 0 0 20px rgba(151, 206, 76, 0.12);
+  }
+
+  .quote-answer.is-correct .quote-answer-indicator {
+    background: rgba(151, 206, 76, 0.88);
+    box-shadow: 0 0 0 6px rgba(151, 206, 76, 0.1), 0 0 12px rgba(151, 206, 76, 0.24);
+  }
+
+  .quote-answer.is-wrong {
+    border-color: rgba(251, 113, 133, 0.28);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.22), 0 0 18px rgba(251, 113, 133, 0.08);
+  }
+
+  .quote-answer.is-wrong .quote-answer-indicator {
+    background: rgba(251, 113, 133, 0.9);
+    box-shadow: 0 0 0 6px rgba(251, 113, 133, 0.08), 0 0 10px rgba(251, 113, 133, 0.18);
+  }
+
+  .quote-answer.is-muted {
+    opacity: 0.58;
+  }
+
+  .slot-orb {
+    position: absolute;
+    width: 25rem;
+    height: 25rem;
+    border-radius: 9999px;
+    filter: blur(60px);
+    opacity: 0.18;
+  }
+
+  .slot-orb-lime {
+    top: -9rem;
+    left: -4rem;
+    background: radial-gradient(circle, rgba(151, 206, 76, 0.86), rgba(151, 206, 76, 0) 72%);
+  }
+
+  .slot-orb-cyan {
+    top: -5rem;
+    right: -5rem;
+    background: radial-gradient(circle, rgba(0, 181, 204, 0.72), rgba(0, 181, 204, 0) 72%);
+  }
+
+  .slot-status-panel {
+    min-width: min(100%, 21rem);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .slot-status-label {
+    display: block;
+    font-size: 0.68rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .slot-status-copy {
+    margin-top: 0.8rem;
+    font-size: 0.98rem;
+    line-height: 1.45;
+    color: #f3f4f6;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+  }
+
+  .slot-status-copy.is-jackpot {
+    color: #d9f7ae;
+    text-shadow: 0 0 16px rgba(151, 206, 76, 0.18);
+  }
+
+  .slot-machine-shell,
+  .slot-result-panel {
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.3);
+  }
+
+  .slot-machine-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 44%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    padding: 1.25rem;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.03),
+      0 22px 50px rgba(0, 0, 0, 0.28);
+  }
+
+  .slot-machine-shell.is-jackpot .slot-machine-panel {
+    border-color: rgba(151, 206, 76, 0.22);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.03),
+      0 22px 50px rgba(0, 0, 0, 0.28),
+      0 0 30px rgba(151, 206, 76, 0.12);
+  }
+
+  .slot-machine-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .slot-machine-kicker {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(151, 206, 76, 0.82);
+  }
+
+  .slot-machine-readout {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.2rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.76);
+    color: #f9fafb;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .slot-reels-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .slot-reels {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 14%),
+      linear-gradient(180deg, rgba(10, 10, 15, 0.82), rgba(17, 24, 39, 0.9));
+  }
+
+  .slot-reels::before,
+  .slot-reels::after {
+    content: '';
+    position: absolute;
+    left: 0.9rem;
+    right: 0.9rem;
+    height: 26%;
+    border-radius: 1.1rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .slot-reels::before {
+    top: 0.8rem;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0));
+  }
+
+  .slot-reels::after {
+    bottom: 0.8rem;
+    background: linear-gradient(0deg, rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0));
+  }
+
+  .slot-reel {
+    position: relative;
+    min-height: 15rem;
+    overflow: hidden;
+    border-radius: 1.3rem;
+    border: 1px solid rgba(151, 206, 76, 0.12);
+    background:
+      linear-gradient(180deg, rgba(0, 181, 204, 0.08), rgba(10, 10, 15, 0.08)),
+      linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(10, 10, 15, 0.96));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slot-reel.is-loading {
+    opacity: 0.82;
+  }
+
+  .slot-reel.is-spinning .slot-reel-window {
+    animation: slotReelBob 260ms linear infinite;
+  }
+
+  .slot-reel-window {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: calc(100% - 1rem);
+    min-height: 8rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(10, 10, 15, 0.2));
+    text-align: center;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    padding: 0.9rem 0.75rem;
+  }
+
+  .slot-reel-code,
+  .slot-reel-name {
+    display: block;
+  }
+
+  .slot-reel-code {
+    font-size: 1.45rem;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #d9f7ae;
+    text-shadow: 0 0 18px rgba(151, 206, 76, 0.14);
+  }
+
+  .slot-reel-name {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: #d1d5db;
+  }
+
+  .slot-lever-button {
+    position: relative;
+    display: flex;
+    min-height: 17rem;
+    width: 5.6rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 22%),
+      linear-gradient(180deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    padding: 1rem 0.7rem;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  }
+
+  .slot-lever-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: rgba(151, 206, 76, 0.2);
+    box-shadow: 0 16px 26px rgba(0, 0, 0, 0.24), 0 0 18px rgba(151, 206, 76, 0.08);
+  }
+
+  .slot-lever-button:disabled {
+    cursor: default;
+    opacity: 0.86;
+  }
+
+  .slot-lever-shaft {
+    width: 0.45rem;
+    height: 8.6rem;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, #8da3b8, #5b6980);
+    transform-origin: top center;
+    transition: transform 0.28s ease;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  }
+
+  .slot-lever-shaft.is-engaged {
+    transform: rotate(18deg) translateY(0.25rem);
+  }
+
+  .slot-lever-knob {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 35% 35%, #dcfce7, #97ce4c 40%, #4d8c2b 72%);
+    box-shadow: 0 0 18px rgba(151, 206, 76, 0.18);
+  }
+
+  .slot-lever-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #d1d5db;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .slot-machine-footer {
+    margin-top: 1rem;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(10, 10, 15, 0.34);
+    padding: 0.95rem 1rem;
+  }
+
+  .slot-machine-footer.is-jackpot {
+    border-color: rgba(151, 206, 76, 0.18);
+    box-shadow: 0 0 20px rgba(151, 206, 76, 0.08);
+  }
+
+  .slot-inline-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 1rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(151, 206, 76, 0.18);
+    background: rgba(151, 206, 76, 0.08);
+    color: #d9f7ae;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .slot-inline-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 9999px;
+    background: rgba(151, 206, 76, 0.92);
+    box-shadow: 0 0 12px rgba(151, 206, 76, 0.24);
+  }
+
+  .slot-inline-error {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0.95rem 1rem;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(251, 113, 133, 0.18);
+    background: rgba(59, 16, 27, 0.28);
+  }
+
+  .slot-result-card {
+    margin-top: 1rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 44%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    padding: 1.2rem;
+  }
+
+  .slot-result-card.is-jackpot {
+    border-color: rgba(151, 206, 76, 0.22);
+    box-shadow: 0 0 24px rgba(151, 206, 76, 0.1);
+  }
+
+  .slot-result-badge,
+  .slot-result-title,
+  .slot-result-airdate,
+  .slot-result-copy {
+    display: block;
+  }
+
+  .slot-result-badge {
+    display: inline-flex;
+    margin-bottom: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(151, 206, 76, 0.24);
+    background: rgba(151, 206, 76, 0.1);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #d9f7ae;
+  }
+
+  .slot-result-title {
+    font-size: 1.45rem;
+    line-height: 1.18;
+    font-weight: 800;
+    color: #f9fafb;
+  }
+
+  .slot-result-airdate {
+    margin-top: 0.55rem;
+    font-size: 0.88rem;
+    color: #9ca3af;
+  }
+
+  .slot-result-copy {
+    margin: 1rem 0 1.1rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #d1d5db;
+  }
+
+  .slot-result-placeholder {
+    margin-top: 1rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 44%),
+      linear-gradient(145deg, rgba(17, 24, 39, 0.94), rgba(10, 10, 15, 0.96));
+    padding: 1.2rem;
+  }
+
   .hero-energy-scene {
     mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.92) 42%, rgba(0, 0, 0, 0.56) 68%, transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.92) 42%, rgba(0, 0, 0, 0.56) 68%, transparent 100%);
@@ -1368,6 +3017,126 @@
     .hero-character-shadow {
       height: 10px;
     }
+
+    .memory-orb {
+      width: 18rem;
+      height: 18rem;
+      opacity: 0.18;
+    }
+
+    .memory-grid {
+      gap: 0.85rem;
+    }
+
+    .memory-card-back-code {
+      font-size: 0.9rem;
+    }
+
+    .memory-card-name {
+      font-size: 0.92rem;
+    }
+
+    .guess-orb {
+      width: 17rem;
+      height: 17rem;
+      opacity: 0.16;
+    }
+
+    .guess-character-meta {
+      padding: 1rem;
+    }
+
+    .guess-character-title {
+      font-size: 1.08rem;
+    }
+
+    .guess-location-header,
+    .guess-location-clues {
+      grid-template-columns: 1fr;
+    }
+
+    .guess-location-sigil {
+      width: 6rem;
+      height: 6rem;
+      right: 0.8rem;
+      bottom: 8.1rem;
+    }
+
+    .guess-location-visual {
+      min-height: 9rem;
+    }
+
+    .guess-location-visual-planet {
+      width: 6.2rem;
+      height: 6.2rem;
+    }
+
+    .guess-location-visual-ring {
+      width: 9rem;
+      right: 3%;
+    }
+
+    .guess-option {
+      padding: 0.9rem 0.95rem;
+    }
+
+    .quote-orb {
+      width: 17rem;
+      height: 17rem;
+      opacity: 0.15;
+    }
+
+    .quote-card-frame {
+      padding: 1.6rem 1.1rem;
+    }
+
+    .quote-answer {
+      padding: 0.9rem 0.95rem;
+    }
+
+    .slot-orb {
+      width: 17rem;
+      height: 17rem;
+      opacity: 0.15;
+    }
+
+    .slot-reels-wrap {
+      grid-template-columns: 1fr;
+    }
+
+    .slot-lever-button {
+      min-height: auto;
+      width: 100%;
+      flex-direction: row;
+      justify-content: center;
+      padding: 0.95rem 1rem;
+    }
+
+    .slot-lever-shaft {
+      width: 4rem;
+      height: 0.45rem;
+    }
+
+    .slot-lever-shaft.is-engaged {
+      transform: rotate(0deg) translateX(0.35rem);
+    }
+
+    .slot-lever-label {
+      writing-mode: initial;
+      transform: none;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .memory-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .memory-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1418,8 +3187,22 @@
     .hero-character-arm-front .hero-character-forearm,
     .hero-character-arm-back .hero-character-forearm,
     .hero-character-leg-front .hero-character-shin,
-    .hero-character-leg-back .hero-character-shin {
+    .hero-character-leg-back .hero-character-shin,
+    .memory-card-back-ring-a,
+    .memory-card-back-ring-b,
+    .memory-card.is-matched .memory-card-inner,
+    .memory-card.is-mismatched .memory-card-inner,
+    .memory-stat-tile-pulse,
+    .memory-success-panel::before,
+    .guess-character-scanline,
+    .guess-option.is-wrong,
+    .quote-card.is-transitioning,
+    .slot-reel.is-spinning .slot-reel-window {
       animation: none !important;
+    }
+
+    .memory-card-inner {
+      transition-duration: 0.01ms !important;
     }
   }
 }
@@ -1738,5 +3521,136 @@
   50% {
     transform: translate3d(-10px, 8px, 0) scale(1.2);
     opacity: 0.78;
+  }
+}
+
+@keyframes memoryPulse {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.9;
+  }
+}
+
+@keyframes memoryMatchedPulse {
+  0% {
+    transform: rotateY(180deg) scale(1);
+  }
+  50% {
+    transform: rotateY(180deg) scale(1.03);
+  }
+  100% {
+    transform: rotateY(180deg) scale(1);
+  }
+}
+
+@keyframes memoryMismatchPulse {
+  0% {
+    transform: rotateY(180deg) scale(1);
+    filter: saturate(1);
+  }
+  35% {
+    transform: rotateY(180deg) scale(1.015);
+    filter: saturate(1.08);
+  }
+  100% {
+    transform: rotateY(180deg) scale(1);
+    filter: saturate(1);
+  }
+}
+
+@keyframes memoryStatPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(151, 206, 76, 0);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 18px rgba(151, 206, 76, 0.12);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(151, 206, 76, 0);
+  }
+}
+
+@keyframes memorySuccessDrift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.98);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(16px, 10px, 0) scale(1.08);
+    opacity: 0.9;
+  }
+}
+
+@keyframes guessScanSweep {
+  0%, 100% {
+    transform: translateY(-18%) scaleX(0.96);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translateY(280%) scaleX(1.04);
+    opacity: 0.72;
+  }
+}
+
+@keyframes guessOptionShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes guessLocationGlowPulse {
+  0%, 100% {
+    opacity: 0.36;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.72;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes quotePortalShift {
+  0% {
+    transform: scale(0.985);
+    opacity: 0.86;
+  }
+  50% {
+    transform: scale(1.015);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slotReelBob {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0.72;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-6px);
+    opacity: 0.72;
   }
 }
