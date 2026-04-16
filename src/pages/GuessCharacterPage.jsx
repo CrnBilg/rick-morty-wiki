@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import CharacterPuzzleBoard from '../components/CharacterPuzzleBoard'
 import ErrorMessage from '../components/ErrorMessage'
 import LoadingSpinner from '../components/LoadingSpinner'
 import PageTitleIcon from '../components/PageTitleIcon'
@@ -9,6 +10,23 @@ const MODES = {
   CHARACTER: 'character',
   LOCATION: 'location',
 }
+
+const CHARACTER_PLAY_MODES = {
+  CLASSIC: 'classic',
+  PUZZLE: 'puzzle',
+}
+
+const PUZZLE_DIFFICULTIES = {
+  EASY: 'easy',
+  MEDIUM: 'medium',
+}
+
+const PUZZLE_HINTS = [
+  { key: 'gender', label: 'Gender' },
+  { key: 'species', label: 'Species' },
+  { key: 'origin', label: 'Origin' },
+]
+
 const CURATED_LOCATION_NAMES = new Set([
   'Earth (C-137)',
   'Citadel of Ricks',
@@ -22,10 +40,10 @@ const CURATED_LOCATION_NAMES = new Set([
   'Snake Planet',
   'Planet Squanch',
   'Gear World',
-  'Worldender\'s lair',
+  "Worldender's lair",
   'Nuptia 4',
   'Story Train',
-  'Mr. Goldenfold\'s dream',
+  "Mr. Goldenfold's dream",
 ])
 
 function shuffleItems(items) {
@@ -104,8 +122,20 @@ function getPartialDimensionLabel(dimension) {
   return `${dimension.slice(0, 14)}...`
 }
 
+function getPuzzleHintValue(target, hintKey) {
+  if (!target) return 'Unavailable'
+
+  if (hintKey === 'origin') {
+    return target.origin?.name || 'Unknown'
+  }
+
+  return target[hintKey] || 'Unknown'
+}
+
 export default function GuessCharacterPage() {
   const [mode, setMode] = useState(MODES.CHARACTER)
+  const [characterPlayMode, setCharacterPlayMode] = useState(CHARACTER_PLAY_MODES.CLASSIC)
+  const [puzzleDifficulty, setPuzzleDifficulty] = useState(PUZZLE_DIFFICULTIES.EASY)
   const [pageTotals, setPageTotals] = useState({
     [MODES.CHARACTER]: null,
     [MODES.LOCATION]: null,
@@ -119,14 +149,20 @@ export default function GuessCharacterPage() {
   const [totalRounds, setTotalRounds] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [hintStep, setHintStep] = useState(0)
+  const [hintPenaltyPoints, setHintPenaltyPoints] = useState(0)
   const isMountedRef = useRef(true)
 
-  async function buildRound(activeMode = mode) {
+  const isCharacterMode = mode === MODES.CHARACTER
+  const isPuzzleMode = isCharacterMode && characterPlayMode === CHARACTER_PLAY_MODES.PUZZLE
+
+  async function buildRound(activeMode = mode, activeCharacterPlayMode = characterPlayMode) {
     setLoading(true)
     setError('')
     setSelectedOption('')
     setRoundResolved(false)
     setIsCorrectGuess(false)
+    setHintStep(0)
 
     try {
       let nextTotalPages = pageTotals[activeMode]
@@ -164,20 +200,24 @@ export default function GuessCharacterPage() {
       }
 
       const answerTarget = pageItems[Math.floor(Math.random() * pageItems.length)]
-      const distractors = sampleUniqueItems(pageItems, 3, answerTarget.id)
+      let nextOptions = []
 
-      if (distractors.length < 3) {
-        throw new Error(
-          activeMode === MODES.CHARACTER
-            ? 'Not enough character options were available for this round.'
-            : 'Not enough location options were available for this round.'
-        )
+      if (!(activeMode === MODES.CHARACTER && activeCharacterPlayMode === CHARACTER_PLAY_MODES.PUZZLE)) {
+        const distractors = sampleUniqueItems(pageItems, 3, answerTarget.id)
+
+        if (distractors.length < 3) {
+          throw new Error(
+            activeMode === MODES.CHARACTER
+              ? 'Not enough character options were available for this round.'
+              : 'Not enough location options were available for this round.'
+          )
+        }
+
+        nextOptions = shuffleItems([
+          answerTarget.name,
+          ...distractors.map((item) => item.name),
+        ])
       }
-
-      const nextOptions = shuffleItems([
-        answerTarget.name,
-        ...distractors.map((item) => item.name),
-      ])
 
       if (!isMountedRef.current) return
 
@@ -210,16 +250,31 @@ export default function GuessCharacterPage() {
   useEffect(() => {
     setCorrectGuesses(0)
     setTotalRounds(0)
-    buildRound(mode).catch(() => {})
-  }, [mode])
+    setHintPenaltyPoints(0)
+    buildRound(mode, characterPlayMode).catch(() => {})
+  }, [mode, characterPlayMode])
 
   function handleModeChange(nextMode) {
     if (loading || mode === nextMode) return
     setMode(nextMode)
   }
 
+  function handleCharacterPlayModeChange(nextPlayMode) {
+    if (loading || characterPlayMode === nextPlayMode) return
+    setCharacterPlayMode(nextPlayMode)
+  }
+
+  function handlePuzzleDifficultyChange(nextDifficulty) {
+    if (loading || puzzleDifficulty === nextDifficulty) return
+    setPuzzleDifficulty(nextDifficulty)
+
+    if (isPuzzleMode) {
+      buildRound(MODES.CHARACTER, CHARACTER_PLAY_MODES.PUZZLE).catch(() => {})
+    }
+  }
+
   function handleGuess(option) {
-    if (loading || roundResolved || !currentTarget) return
+    if (loading || roundResolved || !currentTarget || isPuzzleMode) return
 
     const correct = option === currentTarget.name
 
@@ -233,6 +288,22 @@ export default function GuessCharacterPage() {
     }
   }
 
+  function handlePuzzleComplete() {
+    if (loading || roundResolved || !currentTarget || !isPuzzleMode) return
+
+    setRoundResolved(true)
+    setIsCorrectGuess(true)
+    setTotalRounds((value) => value + 1)
+    setCorrectGuesses((value) => value + 1)
+  }
+
+  function handleRevealHint() {
+    if (!isPuzzleMode || roundResolved || hintStep >= PUZZLE_HINTS.length) return
+
+    setHintStep((value) => value + 1)
+    setHintPenaltyPoints((value) => value + 0.2)
+  }
+
   function getOptionState(option) {
     if (!roundResolved || !currentTarget) return ''
     if (option === currentTarget.name) return 'is-correct'
@@ -240,8 +311,10 @@ export default function GuessCharacterPage() {
     return 'is-dimmed'
   }
 
-  const accuracy = totalRounds > 0 ? `${Math.round((correctGuesses / totalRounds) * 100)}%` : '--'
-  const isCharacterMode = mode === MODES.CHARACTER
+  const adjustedAccuracy = totalRounds > 0
+    ? Math.max(0, Math.round(((correctGuesses - hintPenaltyPoints) / totalRounds) * 100))
+    : null
+  const accuracy = adjustedAccuracy === null ? '--' : `${adjustedAccuracy}%`
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 py-10">
@@ -250,7 +323,7 @@ export default function GuessCharacterPage() {
         <div className="guess-orb guess-orb-cyan" />
       </div>
 
-      <div className="relative z-10 mb-6">
+      <div className="relative z-10 mb-6 flex flex-col gap-3">
         <div className="guess-mode-switch rounded-2xl border border-portal-border bg-portal-card/60 p-2">
           <button
             type="button"
@@ -267,6 +340,25 @@ export default function GuessCharacterPage() {
             Location
           </button>
         </div>
+
+        {isCharacterMode && (
+          <div className="guess-mode-switch rounded-2xl border border-portal-border bg-portal-card/50 p-2">
+            <button
+              type="button"
+              onClick={() => handleCharacterPlayModeChange(CHARACTER_PLAY_MODES.CLASSIC)}
+              className={`guess-mode-button ${!isPuzzleMode ? 'is-active' : ''}`}
+            >
+              Classic Guess
+            </button>
+            <button
+              type="button"
+              onClick={() => handleCharacterPlayModeChange(CHARACTER_PLAY_MODES.PUZZLE)}
+              className={`guess-mode-button ${isPuzzleMode ? 'is-active' : ''}`}
+            >
+              Puzzle Mode
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="relative z-10 mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -275,13 +367,16 @@ export default function GuessCharacterPage() {
             Target Scan
           </p>
           <h1 className="mb-3 font-display text-5xl tracking-wider text-white">
-            GUESS THE <span className="text-portal-lime">{isCharacterMode ? 'CHARACTER' : 'LOCATION'}</span>
-            <PageTitleIcon icon="??" variant="characters" label="Guess the target icon" />
+            {isPuzzleMode ? 'REBUILD THE ' : 'GUESS THE '}
+            <span className="text-portal-lime">{isCharacterMode ? 'CHARACTER' : 'LOCATION'}</span>
+            <PageTitleIcon icon={isPuzzleMode ? '[]' : '??'} variant="characters" label="Guess the target icon" />
           </h1>
           <p className="font-body leading-relaxed text-gray-400">
-            {isCharacterMode
-              ? 'Read the silhouette, lock onto the right identity, and confirm your guess before the signal stabilizes.'
-              : 'Interpret the location signature, study the environment cues, and confirm which place the scanner is targeting.'}
+            {isPuzzleMode
+              ? 'Reassemble the fragmented signal, unlock character hints only when needed, and reveal the target once the board snaps fully into place.'
+              : isCharacterMode
+                ? 'Read the silhouette, lock onto the right identity, and confirm your guess before the signal stabilizes.'
+                : 'Interpret the location signature, study the environment cues, and confirm which place the scanner is targeting.'}
           </p>
         </div>
 
@@ -300,19 +395,62 @@ export default function GuessCharacterPage() {
               <strong className="guess-score-value">{accuracy}</strong>
             </div>
           </div>
+          {isPuzzleMode && (
+            <p className="mt-3 text-center font-body text-xs leading-relaxed text-gray-500">
+              Hint usage lowers accuracy calibration by 20% per reveal.
+            </p>
+          )}
         </div>
       </div>
 
       <div className="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <section className="guess-stage rounded-[1.75rem] border border-portal-border bg-portal-card/70 p-4 sm:p-6">
           {loading && (
-            <LoadingSpinner text={isCharacterMode ? 'Scanning identity...' : 'Scanning location signal...'} />
+            <LoadingSpinner
+              text={
+                isPuzzleMode
+                  ? 'Fragmenting character signal...'
+                  : isCharacterMode
+                    ? 'Scanning identity...'
+                    : 'Scanning location signal...'
+              }
+            />
           )}
-          {!loading && error && <ErrorMessage message={error} onRetry={() => buildRound(mode)} />}
+          {!loading && error && <ErrorMessage message={error} onRetry={() => buildRound(mode, characterPlayMode)} />}
 
           {!loading && !error && currentTarget && (
             <div className="guess-stage-shell">
-              {isCharacterMode ? (
+              {isPuzzleMode ? (
+                <div
+                  className={`guess-character-frame guess-puzzle-frame ${
+                    roundResolved ? 'is-revealed' : 'is-concealed'
+                  } ${roundResolved ? (isCorrectGuess ? 'is-success' : 'is-failed') : ''}`}
+                >
+                  <div className="guess-character-grid" />
+                  <div className="guess-character-glow" />
+                  <div className="guess-character-scanline" />
+                  <CharacterPuzzleBoard
+                    key={`${currentTarget.id}-${puzzleDifficulty}`}
+                    character={currentTarget}
+                    difficulty={puzzleDifficulty}
+                    resolved={roundResolved}
+                    onComplete={handlePuzzleComplete}
+                  />
+                  <div className="guess-character-meta">
+                    <span className="guess-character-kicker">
+                      {roundResolved ? 'Puzzle Resolved' : 'Fragment Array Active'}
+                    </span>
+                    <strong className="guess-character-title">
+                      {roundResolved ? currentTarget.name : 'Unknown Signal'}
+                    </strong>
+                    <span className="guess-character-detail">
+                      {roundResolved
+                        ? `${currentTarget.status} | ${currentTarget.species}`
+                        : 'Drag fragments into their exact slots or tap a piece, then tap a slot to snap it in place.'}
+                    </span>
+                  </div>
+                </div>
+              ) : isCharacterMode ? (
                 <div
                   className={`guess-character-frame ${roundResolved ? 'is-revealed' : 'is-concealed'} ${
                     roundResolved ? (isCorrectGuess ? 'is-success' : 'is-failed') : ''
@@ -428,10 +566,18 @@ export default function GuessCharacterPage() {
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-body font-700 uppercase tracking-[0.28em] text-gray-500">
-                Response Options
+                {isPuzzleMode ? 'Puzzle Controls' : 'Response Options'}
               </p>
               <h2 className="mt-2 font-display text-2xl tracking-wider text-white">
-                Identify The <span className="text-portal-lime">{isCharacterMode ? 'Target' : 'Location'}</span>
+                {isPuzzleMode ? (
+                  <>
+                    Rebuild The <span className="text-portal-lime">Target</span>
+                  </>
+                ) : (
+                  <>
+                    Identify The <span className="text-portal-lime">{isCharacterMode ? 'Target' : 'Location'}</span>
+                  </>
+                )}
               </h2>
             </div>
 
@@ -440,69 +586,167 @@ export default function GuessCharacterPage() {
                 roundResolved ? (isCorrectGuess ? 'is-success' : 'is-failed') : ''
               }`}
             >
-              {roundResolved
-                ? isCorrectGuess
-                  ? 'Portal lock confirmed.'
-                  : 'Signal mismatch detected.'
-                : `Choose one ${isCharacterMode ? 'identity' : 'location'}.`}
+              {isPuzzleMode
+                ? roundResolved
+                  ? 'Fragment grid stabilized.'
+                  : 'Complete the full image.'
+                : roundResolved
+                  ? isCorrectGuess
+                    ? 'Portal lock confirmed.'
+                    : 'Signal mismatch detected.'
+                  : `Choose one ${isCharacterMode ? 'identity' : 'location'}.`}
             </div>
           </div>
 
-          <div className="grid gap-3">
-            {options.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => handleGuess(option)}
-                disabled={loading || roundResolved}
-                className={`guess-option ${getOptionState(option)}`}
-              >
-                <span className="guess-option-copy">
-                  <span className="guess-option-kicker">{isCharacterMode ? 'Candidate' : 'Destination'}</span>
-                  <span className="guess-option-name">{option}</span>
-                </span>
-                <span className="guess-option-indicator" aria-hidden="true" />
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-5 rounded-2xl border border-portal-border/70 bg-portal-dark/40 p-4">
-            {roundResolved ? (
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className={`text-sm font-body font-700 ${isCorrectGuess ? 'text-portal-lime' : 'text-rose-300'}`}>
-                    {isCorrectGuess ? 'Portal Stabilized' : 'Incorrect Read'}
-                  </p>
-                  <p className="mt-1 font-body text-sm leading-relaxed text-gray-400">
-                    {isCorrectGuess
-                      ? `Clean scan. The full ${isCharacterMode ? 'identity' : 'location'} signature is now visible.`
-                      : `The correct ${isCharacterMode ? 'identity' : 'location'} was ${currentTarget?.name}. Reload the scanner for a new target.`}
-                  </p>
+          {isPuzzleMode ? (
+            <>
+              <div className="guess-puzzle-panel-block">
+                <div className="guess-puzzle-panel-head">
+                  <span className="guess-puzzle-panel-kicker">Difficulty</span>
+                  <span className="guess-puzzle-panel-copy">Choose the fragment density for the next round.</span>
                 </div>
+                <div className="guess-puzzle-toggle-row">
+                  <button
+                    type="button"
+                    onClick={() => handlePuzzleDifficultyChange(PUZZLE_DIFFICULTIES.EASY)}
+                    className={`guess-puzzle-chip ${puzzleDifficulty === PUZZLE_DIFFICULTIES.EASY ? 'is-active' : ''}`}
+                  >
+                    Easy • 4 Pieces
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handlePuzzleDifficultyChange(PUZZLE_DIFFICULTIES.MEDIUM)}
+                    className={`guess-puzzle-chip ${puzzleDifficulty === PUZZLE_DIFFICULTIES.MEDIUM ? 'is-active' : ''}`}
+                  >
+                    Medium • 6 Pieces
+                  </button>
+                </div>
+              </div>
+
+              <div className="guess-puzzle-panel-block">
+                <div className="guess-puzzle-panel-head">
+                  <span className="guess-puzzle-panel-kicker">Hint System</span>
+                  <span className="guess-puzzle-panel-copy">Unlock metadata gradually if the board stalls.</span>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => buildRound(mode)}
-                  className="rounded-xl border border-portal-lime/30 bg-portal-lime/10 px-4 py-2.5 font-body text-sm font-700 text-portal-lime transition-all duration-200 hover:border-portal-lime/50 hover:bg-portal-lime/15"
+                  onClick={handleRevealHint}
+                  disabled={roundResolved || hintStep >= PUZZLE_HINTS.length}
+                  className="guess-puzzle-hint-button"
                 >
-                  Next {isCharacterMode ? 'Character' : 'Location'}
+                  {hintStep >= PUZZLE_HINTS.length ? 'All Hints Revealed' : 'Reveal Next Hint'}
                 </button>
+
+                <div className="guess-puzzle-hints">
+                  {PUZZLE_HINTS.map((hint, index) => {
+                    const isVisible = index < hintStep
+
+                    return (
+                      <div key={hint.key} className={`guess-puzzle-hint-card ${isVisible ? 'is-visible' : ''}`}>
+                        <span className="guess-puzzle-hint-label">{hint.label}</span>
+                        <strong className="guess-puzzle-hint-value">
+                          {isVisible ? getPuzzleHintValue(currentTarget, hint.key) : 'Locked'}
+                        </strong>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            ) : (
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="font-body text-sm leading-relaxed text-gray-400">
-                  {isCharacterMode
-                    ? 'One guess per round. When you answer, the image is revealed and the round locks.'
-                    : 'One guess per round. When you answer, the location signature resolves and the round locks.'}
-                </p>
-                <Link
-                  to={isCharacterMode ? '/characters' : '/locations'}
-                  className="rounded-xl border border-portal-border px-4 py-2.5 font-body text-sm font-700 text-white transition-all duration-200 hover:border-portal-green/40 hover:bg-white/5"
-                >
-                  Browse {isCharacterMode ? 'Characters' : 'Locations'}
-                </Link>
+
+              <div className="mt-5 rounded-2xl border border-portal-border/70 bg-portal-dark/40 p-4">
+                {roundResolved ? (
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-sm font-body font-700 text-portal-lime">
+                        Puzzle Completed
+                      </p>
+                      <p className="mt-1 font-body text-sm leading-relaxed text-gray-400">
+                        The full identity is now stabilized. {currentTarget?.name} has been reconstructed from the fragment array.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => buildRound(MODES.CHARACTER, CHARACTER_PLAY_MODES.PUZZLE)}
+                      className="rounded-xl border border-portal-lime/30 bg-portal-lime/10 px-4 py-2.5 font-body text-sm font-700 text-portal-lime transition-all duration-200 hover:border-portal-lime/50 hover:bg-portal-lime/15"
+                    >
+                      Next Puzzle
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="font-body text-sm leading-relaxed text-gray-400">
+                      Drag each fragment into its correct position. On touch devices, tap a piece first, then tap the matching slot.
+                    </p>
+                    <Link
+                      to="/characters"
+                      className="rounded-xl border border-portal-border px-4 py-2.5 font-body text-sm font-700 text-white transition-all duration-200 hover:border-portal-green/40 hover:bg-white/5"
+                    >
+                      Browse Characters
+                    </Link>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          ) : (
+            <>
+              <div className="grid gap-3">
+                {options.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => handleGuess(option)}
+                    disabled={loading || roundResolved}
+                    className={`guess-option ${getOptionState(option)}`}
+                  >
+                    <span className="guess-option-copy">
+                      <span className="guess-option-kicker">{isCharacterMode ? 'Candidate' : 'Destination'}</span>
+                      <span className="guess-option-name">{option}</span>
+                    </span>
+                    <span className="guess-option-indicator" aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-portal-border/70 bg-portal-dark/40 p-4">
+                {roundResolved ? (
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className={`text-sm font-body font-700 ${isCorrectGuess ? 'text-portal-lime' : 'text-rose-300'}`}>
+                        {isCorrectGuess ? 'Portal Stabilized' : 'Incorrect Read'}
+                      </p>
+                      <p className="mt-1 font-body text-sm leading-relaxed text-gray-400">
+                        {isCorrectGuess
+                          ? `Clean scan. The full ${isCharacterMode ? 'identity' : 'location'} signature is now visible.`
+                          : `The correct ${isCharacterMode ? 'identity' : 'location'} was ${currentTarget?.name}. Reload the scanner for a new target.`}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => buildRound(mode, characterPlayMode)}
+                      className="rounded-xl border border-portal-lime/30 bg-portal-lime/10 px-4 py-2.5 font-body text-sm font-700 text-portal-lime transition-all duration-200 hover:border-portal-lime/50 hover:bg-portal-lime/15"
+                    >
+                      Next {isCharacterMode ? 'Character' : 'Location'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="font-body text-sm leading-relaxed text-gray-400">
+                      {isCharacterMode
+                        ? 'One guess per round. When you answer, the image is revealed and the round locks.'
+                        : 'One guess per round. When you answer, the location signature resolves and the round locks.'}
+                    </p>
+                    <Link
+                      to={isCharacterMode ? '/characters' : '/locations'}
+                      className="rounded-xl border border-portal-border px-4 py-2.5 font-body text-sm font-700 text-white transition-all duration-200 hover:border-portal-green/40 hover:bg-white/5"
+                    >
+                      Browse {isCharacterMode ? 'Characters' : 'Locations'}
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </section>
       </div>
     </div>

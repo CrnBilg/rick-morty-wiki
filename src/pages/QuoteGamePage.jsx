@@ -17,10 +17,29 @@ const QUOTES = [
 
 const ANSWERS = ['Rick', 'Morty', 'Summer', 'Jerry']
 const AUTO_NEXT_DELAY_MS = 1600
+const FLIP_DELAY_MS = 180
 const SOUND_FILES = {
   correct: '/sounds/quote-correct.wav',
   wrong: '/sounds/quote-wrong.wav',
   next: '/sounds/quote-next.wav',
+}
+const CHARACTER_REVEALS = {
+  Rick: {
+    image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+    subtitle: 'Rick Sanchez',
+  },
+  Morty: {
+    image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
+    subtitle: 'Morty Smith',
+  },
+  Summer: {
+    image: 'https://rickandmortyapi.com/api/character/avatar/3.jpeg',
+    subtitle: 'Summer Smith',
+  },
+  Jerry: {
+    image: 'https://rickandmortyapi.com/api/character/avatar/5.jpeg',
+    subtitle: 'Jerry Smith',
+  },
 }
 
 function getRandomQuote(previousQuote) {
@@ -42,6 +61,7 @@ export default function QuoteGamePage() {
   const [selectedAnswer, setSelectedAnswer] = useState('')
   const [result, setResult] = useState('')
   const [roundPulse, setRoundPulse] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(false)
   const timeoutRef = useRef(null)
   const audioRef = useRef({})
   const hasInteractedRef = useRef(false)
@@ -88,6 +108,7 @@ export default function QuoteGamePage() {
     window.clearTimeout(timeoutRef.current)
     setSelectedAnswer('')
     setResult('')
+    setIsFlipped(false)
     setRoundPulse(true)
     setCurrentQuote((previousQuote) => getRandomQuote(previousQuote))
 
@@ -101,7 +122,7 @@ export default function QuoteGamePage() {
   }
 
   function handleAnswer(answer) {
-    if (selectedAnswer) return
+    if (selectedAnswer || isFlipped) return
 
     hasInteractedRef.current = true
     const isCorrect = answer === currentQuote.character
@@ -116,6 +137,10 @@ export default function QuoteGamePage() {
       setCorrectCount((value) => value + 1)
     }
 
+    window.setTimeout(() => {
+      setIsFlipped(true)
+    }, FLIP_DELAY_MS)
+
     timeoutRef.current = window.setTimeout(() => {
       loadNextQuote()
     }, AUTO_NEXT_DELAY_MS)
@@ -129,6 +154,7 @@ export default function QuoteGamePage() {
   }
 
   const accuracy = totalRounds > 0 ? `${Math.round((correctCount / totalRounds) * 100)}%` : '--'
+  const revealCharacter = CHARACTER_REVEALS[currentQuote.character]
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 py-10">
@@ -172,18 +198,51 @@ export default function QuoteGamePage() {
 
       <div className="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <section className="quote-stage rounded-[1.75rem] border border-portal-border bg-portal-card/70 p-4 sm:p-6">
-          <div className={`quote-card ${roundPulse ? 'is-transitioning' : ''} ${result ? `is-${result}` : ''}`}>
-            <div className="quote-card-portal" />
-            <div className="quote-card-frame">
-              <span className="quote-card-kicker">Incoming Signal</span>
-              <blockquote className="quote-card-text">“{currentQuote.text}”</blockquote>
-              <p className="quote-card-hint">
-                {selectedAnswer
-                  ? result === 'correct'
-                    ? '+1 Correct'
-                    : `Correct answer: ${currentQuote.character}`
-                  : 'Choose the speaker from the four possible voices.'}
-              </p>
+          <div
+            className={`quote-card ${roundPulse ? 'is-transitioning' : ''} ${result ? `is-${result}` : ''} ${
+              isFlipped ? 'is-flipped' : ''
+            }`}
+          >
+            <div className="quote-card-inner">
+              <div className="quote-card-face quote-card-front">
+                <div className="quote-card-portal" />
+                <div className="quote-card-frame">
+                  <span className="quote-card-kicker">Incoming Signal</span>
+                  <blockquote className="quote-card-text">"{currentQuote.text}"</blockquote>
+                  <p className="quote-card-hint">
+                    {selectedAnswer
+                      ? result === 'correct'
+                        ? '+1 Correct'
+                        : `Correct answer: ${currentQuote.character}`
+                      : 'Choose the speaker from the four possible voices.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="quote-card-face quote-card-back">
+                <div className="quote-card-portal quote-card-portal-back" />
+                <div className="quote-reveal-shell">
+                  <div className={`quote-reveal-media ${result ? `is-${result}` : ''}`}>
+                    <img
+                      src={revealCharacter.image}
+                      alt={revealCharacter.subtitle}
+                      className="quote-reveal-image"
+                    />
+                    <div className="quote-reveal-overlay" />
+                  </div>
+                  <div className="quote-reveal-copy">
+                    <span className={`quote-reveal-kicker ${result ? `is-${result}` : ''}`}>
+                      {result === 'correct' ? 'Identity confirmed' : 'Correct speaker'}
+                    </span>
+                    <strong className="quote-reveal-name">{revealCharacter.subtitle}</strong>
+                    <p className="quote-reveal-hint">
+                      {result === 'correct'
+                        ? 'Clean hit. The quote trace matches perfectly.'
+                        : `You picked ${selectedAnswer}. The correct voice signature belongs to ${currentQuote.character}.`}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -214,7 +273,7 @@ export default function QuoteGamePage() {
                 key={answer}
                 type="button"
                 onClick={() => handleAnswer(answer)}
-                disabled={Boolean(selectedAnswer)}
+                disabled={Boolean(selectedAnswer) || isFlipped}
                 className={`quote-answer ${getAnswerState(answer)}`}
               >
                 <span className="quote-answer-copy">
